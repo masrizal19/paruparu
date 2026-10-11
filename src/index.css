@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+@theme {
+  --color-coral: #FF5C50;
+  --color-coral-light: #FF7368;
+  --color-coral-dark: #E0483C;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: #F6F7FA;
+  color: #1E293B;
+  overflow-x: hidden;
+}
+
+/* Ambient Warm Glassmorphic Backdrop Background */
+.bg-mesh {
+  background: 
+    radial-gradient(circle at 12% 18%, rgba(255, 241, 235, 0.85) 0%, transparent 45%),
+    radial-gradient(circle at 88% 14%, rgba(254, 215, 215, 0.45) 0%, transparent 42%),
+    radial-gradient(circle at 50% 82%, rgba(241, 245, 249, 0.95) 0%, transparent 50%),
+    #F6F7FA;
+}
+
+/* Glassmorphic utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.76);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  box-shadow: 0 10px 30px -10px rgba(100, 116, 139, 0.08), 0 1px 1px 0 rgba(255, 255, 255, 0.9) inset;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 24px -8px rgba(148, 163, 184, 0.12), 0 1px 1px 0 rgba(255, 255, 255, 0.8) inset;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  box-shadow: 0 14px 34px -10px rgba(100, 116, 139, 0.16);
+  border-color: rgba(255, 92, 80, 0.35);
+}
+
+/* Radio button custom option pill styling matching Image 5 */
+.option-pill:checked + label {
+  border-color: #FF5C50 !important;
+  background: linear-gradient(135deg, rgba(255, 241, 240, 0.95) 0%, rgba(255, 255, 255, 0.92) 100%) !important;
+  color: #1E293B !important;
+  box-shadow: 0 4px 14px -2px rgba(255, 92, 80, 0.2) !important;
+}
+
+.option-pill:checked + label .pill-indicator {
+  border-color: #FF5C50 !important;
+  background-color: #FF5C50 !important;
+  box-shadow: 0 0 0 3px rgba(255, 92, 80, 0.22) !important;
+}
+
+/* Subtle gentle lung breathing keyframe */
+@keyframes lungBreathing {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.95;
+  }
+  50% {
+    transform: scale(1.035);
+    opacity: 1;
+  }
+}
+
+.animate-lungs-breath {
+  animation: lungBreathing 4.5s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+/* Custom scrollbars */
+pre::-webkit-scrollbar,
+div::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+pre::-webkit-scrollbar-thumb,
+div::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}

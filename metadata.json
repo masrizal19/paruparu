@@ -1,0 +1,6 @@
+{
+  "name": "PARU-PARU - Deteksi & Analisis Kesehatan Paru",
+  "description": "Aplikasi deteksi kesehatan paru-paru berbasis metode BIOS, pemindaian akustik AI, dan analisis spirometri interaktif.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
