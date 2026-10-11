@@ -39,42 +39,54 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
     }
 
     setIsLoading(true);
-    const { error, data, isAdmin } = await signInWithEmail(email, password);
-    setIsLoading(false);
+    try {
+      const { error, data, isAdmin } = await signInWithEmail(email, password);
+      setIsLoading(false);
 
-    if (error) {
-      const msg = error.message.toLowerCase();
-      if (
-        msg.includes('invalid login credentials') ||
-        msg.includes('invalid grant') ||
-        msg.includes('user not found')
-      ) {
-        setErrorMsg('Email atau kata sandi salah. Silakan periksa kembali akun Supabase Anda.');
-      } else if (msg.includes('email not confirmed')) {
-        setErrorMsg('Email belum dikonfirmasi. Silakan verifikasi email Anda di Supabase.');
-      } else {
-        setErrorMsg(error.message || 'Gagal masuk ke sistem Supabase.');
+      if (error) {
+        const msg = (error.message || '').toLowerCase();
+        if (
+          msg.includes('failed to fetch') ||
+          msg.includes('networkerror') ||
+          msg.includes('typeerror') ||
+          error instanceof TypeError
+        ) {
+          setErrorMsg('Gagal terhubung ke server Supabase. Pastikan koneksi internet stabil dan konfigurasi API Key sudah benar.');
+        } else if (
+          msg.includes('invalid login credentials') ||
+          msg.includes('invalid grant') ||
+          msg.includes('user not found')
+        ) {
+          setErrorMsg('Email atau kata sandi salah. Silakan periksa kembali akun Supabase Anda.');
+        } else if (msg.includes('email not confirmed')) {
+          setErrorMsg('Email belum dikonfirmasi. Silakan verifikasi email Anda di Supabase.');
+        } else {
+          setErrorMsg(error.message || 'Gagal masuk ke sistem Supabase.');
+        }
+        return;
       }
-      return;
+
+      // Logic Pengecekan Admin & Redireksi Setelah Login
+      const loggedInUser = data?.user;
+      const isOfficialAdmin =
+        isAdmin ||
+        loggedInUser?.id === OFFICIAL_ADMIN_ID ||
+        loggedInUser?.app_metadata?.role === 'admin' ||
+        loggedInUser?.user_metadata?.role === 'admin';
+
+      if (isOfficialAdmin) {
+        setSuccessMsg('Autentikasi Administrator Berhasil! Mengalihkan ke Portal Admin...');
+      } else {
+        setSuccessMsg('Autentikasi Berhasil! Mengalihkan ke Dashboard Pasien...');
+      }
+
+      setTimeout(() => {
+        onLoginSuccess(isOfficialAdmin);
+      }, 600);
+    } catch (err: any) {
+      setIsLoading(false);
+      setErrorMsg('Gagal terhubung ke server Supabase. Pastikan koneksi internet stabil dan konfigurasi API Key sudah benar.');
     }
-
-    // Logic Pengecekan Admin & Redireksi Setelah Login
-    const loggedInUser = data?.user;
-    const isOfficialAdmin =
-      isAdmin ||
-      loggedInUser?.id === OFFICIAL_ADMIN_ID ||
-      loggedInUser?.app_metadata?.role === 'admin' ||
-      loggedInUser?.user_metadata?.role === 'admin';
-
-    if (isOfficialAdmin) {
-      setSuccessMsg('Autentikasi Administrator Berhasil! Mengalihkan ke Portal Admin...');
-    } else {
-      setSuccessMsg('Autentikasi Berhasil! Mengalihkan ke Dashboard Pasien...');
-    }
-
-    setTimeout(() => {
-      onLoginSuccess(isOfficialAdmin);
-    }, 600);
   };
 
   const handleRegister = async (e: React.FormEvent) => {

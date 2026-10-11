@@ -4,6 +4,10 @@ import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
 const envUrl = import.meta.env.VITE_SUPABASE_URL || '';
 const envAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
+if (!envUrl || !envAnonKey || envUrl.includes('your-project') || envUrl.includes('sample-project') || envAnonKey.includes('sample-anon-key')) {
+  console.error("Supabase Environment Variables are missing. Please check GitHub Secrets configuration.");
+}
+
 // LocalStorage keys for dynamic configuration fallback
 const STORAGE_URL_KEY = 'paruparu_supabase_url';
 const STORAGE_KEY_KEY = 'paruparu_supabase_anon_key';
